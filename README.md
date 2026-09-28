@@ -1,66 +1,131 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# To-Do List
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A task manager built with **Laravel 10**. Users register, log in, and manage their own tasks: create, edit, complete, and delete them. Every action is logged, and users get an email whenever a task is updated. A statistics page shows daily completion rate and average completion time.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Authentication**: register, login, logout, password reset and email verification (Laravel UI scaffolding)
+- **Task management (CRUD)**: create, edit and delete tasks with a title and description
+- **Task status**: mark tasks as *Completed* or back to *In progress*; completed tasks are highlighted in the list
+- **Validation**: title (required, max 255 characters) and description are validated server-side
+- **Email notifications**: an email is sent to the user each time a task is updated
+- **Activity log**: every create / update / complete / delete action is recorded with [spatie/laravel-activitylog](https://github.com/spatie/laravel-activitylog)
+- **Statistics**: daily completion rate and average completion time
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Tech stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+| Layer     | Tools                                   |
+|-----------|-----------------------------------------|
+| Backend   | PHP 8.1+, Laravel 10                    |
+| Database  | MySQL                                   |
+| Frontend  | Blade templates, Bootstrap 5, Sass      |
+| Build     | Vite                                    |
+| Packages  | laravel/ui, laravel/sanctum, spatie/laravel-activitylog |
+| Mail      | SMTP (configurable), Mailgun mailer available |
 
-## Learning Laravel
+## Getting started
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Prerequisites
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- PHP 8.1 or higher
+- Composer
+- Node.js and npm
+- MySQL
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Installation
 
-## Laravel Sponsors
+```bash
+# 1. Clone the repository
+git clone https://github.com/Malekkk25/To_DO_List.git
+cd To_DO_List
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+# 2. Install dependencies
+composer install
+npm install
 
-### Premium Partners
+# 3. Set up the environment file
+cp .env.example .env
+php artisan key:generate
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### Configure `.env`
 
-## Contributing
+Set your database and mail credentials:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=todo_app
+DB_USERNAME=root
+DB_PASSWORD=your_password
 
-## Code of Conduct
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=your_email@example.com
+MAIL_PASSWORD=your_app_password
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=your_email@example.com
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+> For Gmail, use an [App Password](https://support.google.com/accounts/answer/185833), not your normal password. Never commit real credentials.
 
-## Security Vulnerabilities
+### Run the app
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+# Create the database tables
+php artisan migrate
+
+# Start the frontend build (in one terminal)
+npm run dev
+
+# Start the Laravel server (in another terminal)
+php artisan serve
+```
+
+Open <http://localhost:8000>, register an account and start adding tasks.
+
+## Routes
+
+| Method | URI                         | Description                  |
+|--------|-----------------------------|------------------------------|
+| GET    | `/task/index`               | List your tasks              |
+| GET    | `/tasks/create`             | New task form                |
+| POST   | `/tasks/store`              | Save a new task              |
+| GET    | `/tasks/{id}/edit`          | Edit task form               |
+| PUT    | `/tasks/update`             | Update a task                |
+| DELETE | `/tasks/{id}`               | Delete a task                |
+| POST   | `/tasks/{task}/complete`    | Mark a task as completed     |
+| POST   | `/tasks/{task}/uncomplete`  | Mark a task as in progress   |
+| GET    | `/stats/daily`              | Daily statistics             |
+
+## Project structure
+
+```
+app/
+├── Http/Controllers/
+│   ├── ToDoController.php        # Task CRUD and status changes
+│   └── StatisticsController.php  # Completion statistics
+├── Http/Requests/TaskRequest.php # Validation rules
+├── Mail/TaskUpdated.php          # Task update email
+└── Models/Task.php
+database/migrations/              # tasks, users, activity_log tables
+resources/views/                  # Blade views (tasks, auth, emails, layouts)
+routes/web.php
+```
+
+## Roadmap
+
+- [ ] Weekly and monthly statistics pages
+- [ ] Scheduled email reminders / daily report
+- [ ] Task due dates and priorities
+- [ ] Automated tests
+
+## Author
+
+**Malek** ([@Malekkk25](https://github.com/Malekkk25))
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is open-sourced under the [MIT license](https://opensource.org/licenses/MIT).
